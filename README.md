@@ -1,0 +1,2 @@
+# vadaboz
+Vadaboz uz loyihasi
