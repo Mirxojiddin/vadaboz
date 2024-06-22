@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -31,12 +32,22 @@ class CustomUser(AbstractUser):
 	name = models.CharField(max_length=255)
 	first_name = models.CharField(max_length=255)
 	last_name = models.CharField(max_length=255)
-	province = models.ForeignKey(Province, on_delete=models.CASCADE)
-	district = models.ForeignKey(District, on_delete=models.CASCADE)
-	city = models.ForeignKey(City, on_delete=models.CASCADE)
+	province = models.ForeignKey(Province, on_delete=models.SET_NULL, null=True)
+	district = models.ForeignKey(District, on_delete=models.SET_NULL, null=True)
+	city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
+
+	def clean(self):
+		super().clean()
+		if self.district and self.province and self.district.province != self.province:
+			raise ValidationError('The district must belong to the selected province.')
+		if self.city:
+			if not self.province or not self.district:
+				raise ValidationError('Both province and district must be selected for the city.')
+			if self.city.district != self.district or self.city.province != self.province:
+				raise ValidationError('The city must belong to the selected district and province.')
 
 	def __str__(self):
-		return self.name
+		return self.username
 
 
 
