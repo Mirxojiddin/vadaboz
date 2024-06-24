@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Manager
 
 
 class Province(models.Model):
@@ -48,7 +49,24 @@ class CustomUser(AbstractUser):
 
 	def __str__(self):
 		return self.username
+	objects = Manager()
+
+	def get_full_name(self):
+		return f"{self.first_name} {self.last_name}"
 
 
+class FriendRequest(models.Model):
+	from_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='from_user')
+	to_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='to_user')
+	status = models.BooleanField(default=0)
+
+	def __str__(self):
+		return f"{self.from_user.first_name} {self.to_user.first_name}"
 
 
+class UserFriend(models.Model):
+	user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='user')
+	friend = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='friend')
+
+	def __str__(self):
+		return f"{self.friend.first_name} {self.user.first_name}"

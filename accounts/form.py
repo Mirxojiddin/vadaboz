@@ -65,3 +65,13 @@ class CustomUserUpdateForm(UserChangeForm):
         elif self.instance.pk:
             self.fields['district'].queryset = self.instance.province.district_set.order_by('name')
             self.fields['city'].queryset = self.instance.district.city_set.order_by('name')
+
+
+class CustomUserForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'first_name', 'last_name', 'province', 'district', 'city', 'is_staff',
+                  'is_active', 'is_superuser', 'groups', 'user_permissions']
+
+    class Media:
+        js = ('/js/custom_user.js',)

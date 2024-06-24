@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %} Friends {% endblock %}
+
+
+{% block contend %}
+<div class="row ml-2">
+    <div class="col-4">
+        Friends <br>
+
+            {% if friends%}
+            {% for friend in friends %}
+                <div class="row">
+                <div class="col - 4">
+                    {% if friend.friend_id != request.user.id%}
+                        <img src="{{friend.friend.user_photo.url}}" class="d-block ui-w-40 rounded-circle" alt="profile">
+                     {% else %}
+                        <img src="{{friend.user.user_photo.url}}" class="d-block ui-w-40 rounded-circle" alt="profile">
+                    {%endif%}
+
+                </div>
+                <div class="col - 6">
+                    {% if friend.friend_id != request.user.id%}
+                        <a href="{% url 'accounts:friend-ditail' friend.friend_id  %}"> <h5>{{friend.friend.fullname}}</h5></a>
+                     {% else %}
+                        <a href="{% url 'accounts:friend-ditail' friend.user_id  %}"> <h5>{{friend.user.fullname}}</h5></a>
+                    {%endif%}
+
+                    </div>
+                </div>
+            {%endfor%}
+            {%else%}
+            not Found
+
+
+            {%endif%}
+
+
+    </div>
+    <div class="col-6">
+            Friend requests<br>
+
+            {% if friend_requests%}
+            {% for friend_request in friend_requests %}
+                <div class="row mb-2">
+                    <div class="col-4">
+                        <h5>{{friend_request.from_user.username}}</h5>
+                    </div>
+                    <div class="col-2">
+                        <a href="{% url 'accounts:add-friend' friend_request.from_user.id %}" class="btn btn-success"> add </a>
+                    </div>
+                    <div class="col-2">
+                        <a href="{% url 'accounts:reject-friend' friend_request.from_user.id %}" class="btn btn-warning"> reject </a>
+                    </div>
+              </div>
+
+            {%endfor%}
+
+            {%else%}
+            not Found
+            {%endif%}
+    </div>
+</div>
+
+{% endblock %}

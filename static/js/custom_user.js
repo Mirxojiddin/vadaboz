@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     option.textContent = district.name;
                     districtField.appendChild(option);
                 });
-                // districtField.dispatchEvent(new Event('change'));
+                districtField.dispatchEvent(new Event('change'));
             });
     });
 

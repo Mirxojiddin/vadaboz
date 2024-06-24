@@ -1,5 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+
+from .form import CustomUserForm
 from .models import Province, District, City, CustomUser
 
 # Register Province model with the admin
@@ -21,30 +23,30 @@ class CityAdmin(admin.ModelAdmin):
 
 # Customize CustomUser model admin
 class CustomUserAdmin(UserAdmin):
+    form = CustomUserForm
     model = CustomUser
     list_display = ('username', 'email', 'first_name', 'last_name', 'province', 'district', 'city', 'is_staff', 'is_active')
     list_filter = ('is_staff', 'is_active', 'province', 'district', 'city')
     search_fields = ('username', 'email', 'first_name', 'last_name')
     ordering = ('username',)
 
-    # Fields to be displayed in the add/edit form
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
-        ('Personal info', {'fields': ('first_name', 'last_name', 'email', 'name')}),
+        ('Personal info', {'fields': ('first_name', 'last_name', 'email', )}),
         ('Location', {'fields': ('province', 'district', 'city')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
 
-    # Fields to be displayed in the create form
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'password1', 'password2', 'first_name', 'last_name', 'email', 'name', 'province', 'district', 'city', 'is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}
+            'fields': ('username', 'password1', 'password2', 'first_name', 'last_name', 'email'
+                       , 'province', 'district', 'city', 'is_active', 'is_staff', 'is_superuser',
+                       'groups', 'user_permissions')}
         ),
     )
 
-    # Fields to be used in the filter sidebar
     filter_horizontal = ('groups', 'user_permissions')
 
 

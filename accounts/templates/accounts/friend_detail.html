@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} Friend {% endblock %}
+{%block contend%}
+    <div class="row">
+      <h2>  Do'stingiz {{friend.get_full_name}}</h2>
+        <img class="cover1_pic" alt="book" src="{{friend.user_photo.url}} ">
+    </div>
+    <h3> Do'stingizni vadalari</h3>
+    {%if friend.bookreview_set.all%}
+        <div class="row">
+
+
+        {% for review in friend.bookreview_set.all %}
+        <div class="row">
+            <div class="col-2">
+                 <img class="d-block ui-w-40 rounded-circle" alt="book" src="{{review.book.cover_photo.url}} ">
+            </div>
+            <div class="col-4">
+                 <a href="{% url 'books:detail' review.book.id %}">
+                    {{review.book.title}}
+                </a>
+            </div>
+        </div>
+
+        {%endfor%}
+    </div>
+    {%else%}
+    <h3>topilmadi</h3>
+{%endif%}
+   <h3> bajargan vadalari</h3>
+    {%if friend.promise.all%}
+        <div class="row">
+
+
+        {% for like in friend.liketobook_set.all %}
+        <div class="row">
+            <div class="col-2">
+                 <img class="d-block ui-w-40 rounded-circle" alt="book" src="{{like.book.cover_photo.url}} ">
+            </div>
+            <div class="col-4">
+                <a href="{% url 'books:detail' like.book.id %}">
+                    {{like.book.title}}
+                </a>
+            </div>
+        </div>
+
+        {%endfor%}
+    </div>
+    {%else%}
+    <h3>topilmadi</h3>
+    {%endif%}
+
+{% endblock %}
