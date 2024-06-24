@@ -29,12 +29,12 @@ class City(models.Model):
 
 class CustomUser(AbstractUser):
 	email = models.EmailField(unique=True)
-	name = models.CharField(max_length=255)
 	first_name = models.CharField(max_length=255)
 	last_name = models.CharField(max_length=255)
 	province = models.ForeignKey(Province, on_delete=models.SET_NULL, null=True)
 	district = models.ForeignKey(District, on_delete=models.SET_NULL, null=True)
 	city = models.ForeignKey(City, on_delete=models.SET_NULL, null=True)
+	user_photo = models.ImageField(default="default_photo.jpg")
 
 	def clean(self):
 		super().clean()

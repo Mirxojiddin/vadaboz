@@ -19,7 +19,11 @@ SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG", default=False, cast=bool)
 
 ALLOWED_HOSTS = []
+LOGIN_URL = "accounts:login"
+# Application definition
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 # Application definition
 
@@ -30,6 +34,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # library
+    'crispy_forms',
+    "crispy_bootstrap5",
+
+    # apps
     'accounts.apps.AccountsConfig',
 ]
 
@@ -44,6 +53,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'conf.urls'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = 'media-files'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static'
+]
 
 TEMPLATES = [
     {
