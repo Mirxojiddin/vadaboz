@@ -153,7 +153,4 @@ class FamiliarUsersView(LoginRequiredMixin, View):
             'id_friend': id_friend,
             "users": users
         }
-        print(id_friend, id_request)
-
-        return render(request, "accounts/family_users.html", contex )
-
+        return render(request, "accounts/familiar_users.html", contex)

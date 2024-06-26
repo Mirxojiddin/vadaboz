@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %} Tanishlar {% endblock %}
+
+
+{% block contend %}
+
+ <h1> Sizga tanish bo'lishi mumkin</h1>
+<div class="row ml-2">
+    <div class="col-4">
+
+
+          {% for user in users%}
+             {% if user.id != request.user.id %}
+                    <div class="row">
+                            <div class="col - 3">
+                                <img src="{{user.user_photo.url}}" class="d-block ui-w-40 rounded-circle" alt="profile">
+                            </div>
+                            <div class="col - 6">
+
+                                <a href="{% url 'accounts:friend-ditail' user.id  %}"> <h5>{{user.get_full_name}}</h5></a>
+                            </div>
+
+
+                            <div class="col - 3">
+                                    {{user.id}}
+                                {% if user.id not in id_request %}
+                                        {% if user.id not in id_friend %}
+
+                                                <a href="{% url 'accounts:friend-request' user.id %}" class="btn btn-info">Request</a>
+                                            {% endif %}
+                                        {% endif %}
+
+
+                            </div>
+                    </div>
+            {% endif %}
+
+          {%endfor%}
+
+
+    </div>
+</div>
+
+{% endblock %}
