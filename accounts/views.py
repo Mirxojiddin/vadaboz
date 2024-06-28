@@ -1,7 +1,7 @@
 from django.contrib.auth import logout, login
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q
+from django.db.models import Q, Case, When, IntegerField
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
@@ -138,11 +138,19 @@ class FamiliarUsersView(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
 
-        users = CustomUser.objects.filter(
-                                        Q(city=request.user.city) |
-                                        Q(district=request.user.district) |
-                                        Q(province=request.user.province)
-                                           )
+        users = CustomUser.objects.annotate(
+            match_priority=Case(
+                When(city=user.city, then=1),
+                When(district=user.district, then=2),
+                When(province=user.province, then=3),
+                default=4,
+                output_field=IntegerField(),
+            )
+        ).filter(
+            Q(city=user.city) |
+            Q(district=user.district) |
+            Q(province=user.province)
+        ).order_by('match_priority')
         friend_requests = FriendRequest.objects.filter(from_user=request.user.id)
         friends = UserFriend.objects.filter(Q(user=request.user.id) | Q(friend=request.user.id))
         id_friend = [user['user_id'] for user in friends.values()]

@@ -9,6 +9,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name='index'),
     path('accounts/', include('accounts.urls')),
+    path('promise/', include('promise.urls')),
     path('ajax/load-districts/', LoadDistrictsView.as_view(), name='ajax_load_districts'),
     path('ajax/load-cities/', LoadCitiesView.as_view(), name='ajax_load_cities'),
 ]

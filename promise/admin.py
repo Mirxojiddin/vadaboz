@@ -1,3 +1,8 @@
 from django.contrib import admin
+from promise.models import Promise, BrokenPromise
 
-# Register your models here.
+
+admin.site.register(Promise)
+admin.site.register(BrokenPromise)
+
+

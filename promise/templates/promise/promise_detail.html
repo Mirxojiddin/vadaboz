@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Promise {% endblock %}
+{% load crispy_forms_tags %}
+
+
+{% block contend %}
+
+<h1> {{promise.title}}</h1>
+
+    <p> Stasus:<b>{{promise.status}} </b> </p>
+    <p>Tarifi:<b> {{promise.body}} </b> </p>
+    <p>Turi:<b> {{promise.public}} </b> </p>
+    <p>Yakunlanadi:<b> {{promise.finished_at}} </b> </p>
+
+
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Promise {% endblock %}
+{% load crispy_forms_tags %}
+
+
+{% block contend %}
+<div class="row ml-2">
+    <div class="col-4">
+        <form  method="post">
+            {% csrf_token %}
+            {{form|crispy}}
+            <button type="submit" class="btn btn-primary">create</button>
+        </form>
+
+    </div>
+</div>
+
+<h1> Sizning vadalaringiz</h1>
+{% for promise in promises %}
+<a href="{% url 'promise:detail' promise.id %}"> Nomir:<b>{{promise.title}} </b></a>
+<a href="{% url 'promise:update' promise.id %}"><i class="bi bi-pen"></i></a>
+<a href="{% url 'promise:confirm-delete' promise.id %}"><i class="bi bi-trash"></i></a> <br>
+
+{%endfor%}
+
+
+
+{% endblock %}

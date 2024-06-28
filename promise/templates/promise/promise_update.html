@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %} Promise {% endblock %}
+{% load crispy_forms_tags %}
+
+
+{% block contend %}
+<div class="row ml-2">
+    <div class="col-4">
+        <form  method="post">
+            {% csrf_token %}
+            {{form|crispy}}
+            <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}
