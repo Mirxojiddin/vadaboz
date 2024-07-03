@@ -50,6 +50,40 @@ class FinishedPromise(models.Model):
 	class Meta:
 		ordering = ['-created_at']
 		unique_together = ('user', 'promise')
+		verbose_name_plural = 'Finished Promises'
+		verbose_name = 'Finished Promise'
+
+	def __str__(self):
+		return f"{self.promise.__str__()}"
+
+
+class PromiseCommit(models.Model):
+	user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+	promise = models.ForeignKey(Promise, on_delete=models.CASCADE)
+	commit = models.TextField()
+	created_at = models.DateField(auto_now=True)
+
+	class Meta:
+		ordering = ['-created_at', '-id']
+		verbose_name = 'Promise Commit'
+		verbose_name_plural = 'Promise Commits'
+
+	def __str__(self):
+		return f"{self.promise.__str__()}"
+
+
+
+class LikeToPromise(models.Model):
+	promise = models.ForeignKey(Promise, on_delete=models.CASCADE)
+	user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+
+	def __str__(self):
+		return f"{self.promise.__str__()}"
+
+
+class DislikeToPromise(models.Model):
+	promise = models.ForeignKey(Promise, on_delete=models.CASCADE)
+	user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
 	def __str__(self):
 		return f"{self.promise.__str__()}"

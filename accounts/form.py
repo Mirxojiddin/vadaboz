@@ -75,3 +75,5 @@ class CustomUserForm(forms.ModelForm):
 
     class Media:
         js = ('/js/custom_user.js',)
+
+

@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .form import CustomUserForm
-from .models import Province, District, City, CustomUser
+from .models import Province, District, City, CustomUser, UserFriend, FriendRequest
 
 # Register Province model with the admin
 @admin.register(Province)
@@ -68,3 +68,5 @@ class DistrictAdmin(admin.ModelAdmin):
 
 
 admin.site.register(District, DistrictAdmin)
+admin.site.register(UserFriend)
+admin.site.register(FriendRequest)

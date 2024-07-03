@@ -1,7 +1,7 @@
 from django.urls import path
 
 from accounts.views import LoginView, RegisterView, LogoutView, ProfileView, ProfileEdit, FriendView, FriendDetailView, \
-	AddFriendView, RejectFriendView, FriendRequestView, FamiliarUsersView
+	AddFriendView, RejectFriendView, FriendRequestView, FamiliarUsersView, FriendPromiseDetailView
 
 app_name = 'accounts'
 
@@ -17,5 +17,7 @@ urlpatterns = [
 	path('reject-friends/<int:id>', RejectFriendView.as_view(), name='reject-friend'),
 	path('friend_request/<int:userid>', FriendRequestView.as_view(), name='friend-request'),
 	path('familiar/', FamiliarUsersView.as_view(), name='familiar'),
+	path('friend-ditail/<int:friend_id>/<int:pk>', FriendPromiseDetailView.as_view(), name='friend-promise'),
+
 
 ]

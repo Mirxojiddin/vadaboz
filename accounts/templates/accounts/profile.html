@@ -6,11 +6,103 @@
 {% block contend %}
 
 <h1> Profile page</h1>
-    <img class="img" src="{{user.user_photo.url}}"> <br>
-    <a href="{% url 'accounts:profile_edit' %}">  Edit </a> <br>
+<img class="img" src="{{user.user_photo.url}}"> <br>
+<a href="{% url 'accounts:profile_edit' %}"> Edit </a> <br>
 
-    {{user.username}}<br>
-    {{user.first_name}} <br>
-    {{user.last_name}}<br>
-    {{user.email}}<br>
+{{user.username}}<br>
+{{user.first_name}} <br>
+{{user.last_name}}<br>
+{{user.email}}<br>
+
+
+<h3> Sizning vadalaringiz</h3>
+<div class="row" >
+    {%if promises%}
+        {% for promise in promises %}
+            <div class="row">
+                <div>
+                    <ul>
+                        <div class="col-4">
+                            <a href="{% url 'promise:detail' promise.id %}"> Nomi:<b>{{promise.title}} </b></a>
+                            <a href="{% url 'promise:update' promise.id %}"><i class="bi bi-pen"></i></a>
+                            <a href="{% url 'promise:confirm-delete' promise.id %}"><i class="bi bi-trash"></i></a>
+                        </div>
+                        <li>
+                            Tanifi: {{promise.body}}
+                        </li>
+                        <li>
+                            Tugatilish vaqti:{{promise.finished_at}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        {%endfor%}
+    {%else%}
+     <h3>topilmadi</h3>
+
+    {%endif%}
+</div>
+<div class="row" >
+
+    <h3> Bajargan vadalaringiz</h3>
+    {%if finished_promises%}
+
+
+        {% for finished_promise in finished_promises %}
+            <div class="row">
+                <div>
+                    <ul>
+                        <div class="col-4">
+                            <a href="{% url 'promise:detail' finished_promise.promise.id %}"> Nomir:<b>{{finished_promise.promise.title}} </b></a>
+                            <a href="{% url 'promise:update' finished_promise.promise.id %}"><i class="bi bi-pen"></i></a>
+                            <a href="{% url 'promise:confirm-delete' finished_promise.promise.id %}"><i class="bi bi-trash"></i></a>
+
+                        </div>
+
+
+                            <li>
+                                Tasnifi:{{finished_promise.promise.body}}
+                            </li>
+                            <li>
+                                Tugatilish vaqti:{{finished_promise.promise.finished_at}}
+                            </li>
+                    </ul>
+                </div>
+            </div>
+
+        {%endfor%}
+    {%else%}
+        <h3>topilmadi</h3>
+    {%endif%}
+</div>
+<div class="row" >
+    <h3> Bajarmagan vadalaringiz</h3>
+    {%if broken_promises%}
+
+        {% for broken_promise in broken_promises %}
+        <div class="row">
+            <div>
+                <ul>
+                    <div class="col-4">
+                        <a href="{% url 'promise:detail' broken_promise.promise.id %}">
+                            Nomi:<b>{{broken_promise.promise.title}} </b>
+                        </a>
+                        <a href="{% url 'promise:update' broken_promise.promise.id %}"><i class="bi bi-pen"></i></a>
+                        <a href="{% url 'promise:confirm-delete' broken_promise.promise.id %}"><i class="bi bi-trash"></i></a>
+                    </div>
+
+                    <li>
+                        Tasnifi: {{broken_promise.promise.body}}
+                    </li>
+                    <li>
+                        Tugatilish vaqti:{{broken_promise.promise.finished_at}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        {%endfor%}
+    {%else%}
+        <h3>topilmadi</h3>
+    {%endif%}
+</div>
 {% endblock %}

@@ -6,6 +6,8 @@
 
 {% block contend %}
 
+
+
 <h1> {{promise.title}}</h1>
 
     <p> Stasus:<b>{{promise.status}} </b> </p>
@@ -13,6 +15,21 @@
     <p>Turi:<b> {{promise.public}} </b> </p>
     <p>Yakunlanadi:<b> {{promise.finished_at}} </b> </p>
 
+    {% if promise.promisecommit_set.all%}
+    <br><b> <i>Commitlar</i> </b>
+        {%for commit in promise.promisecommit_set.all %}
+            <h5>{{commit.user.username}}</h5>
+            <h6>{{commit.commit}}</h6>
+            <h6>{{commit.created_at}}</h6>
+    
+        {%endfor%}
+    {%endif%}
+    
+<form  method="post">
+            {% csrf_token %}
+            {{form|crispy}}
+            <button type="submit" class="btn btn-primary">Add Commit</button>
+</form>
 
 
 {% endblock %}

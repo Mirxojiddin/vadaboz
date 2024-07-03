@@ -21,9 +21,9 @@
                 </div>
                 <div class="col - 6">
                     {% if friend.friend_id != request.user.id%}
-                        <a href="{% url 'accounts:friend-ditail' friend.friend_id  %}"> <h5>{{friend.friend.fullname}}</h5></a>
+                        <a href="{% url 'accounts:friend-ditail' friend.friend_id  %}"> <h5>{{friend.friend.get_full_name}}</h5></a>
                      {% else %}
-                        <a href="{% url 'accounts:friend-ditail' friend.user_id  %}"> <h5>{{friend.user.fullname}}</h5></a>
+                        <a href="{% url 'accounts:friend-ditail' friend.user_id  %}"> <h5>{{friend.user.get_full_name}}</h5></a>
                     {%endif%}
 
                     </div>

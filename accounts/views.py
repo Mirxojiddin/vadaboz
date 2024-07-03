@@ -8,6 +8,8 @@ from django.views import View
 from django.contrib import messages
 from accounts.form import CustomUserRegistrationForm, CustomUserUpdateForm
 from accounts.models import CustomUser, FriendRequest, UserFriend
+from promise.models import BrokenPromise, FinishedPromise, Promise, LikeToPromise, DislikeToPromise, PromiseCommit
+from promise.form import PromiseCommitForm
 
 
 class RegisterView(View):
@@ -70,7 +72,19 @@ class LogoutView(View):
 class ProfileView(LoginRequiredMixin, View):
     def get(self, request):
         user = request.user
-        return render(request, "accounts/profile.html", {"user": user})
+        promises = Promise.objects.filter(user=user)
+        broken_promises = BrokenPromise.objects.filter(user=user)
+        finished_promises = FinishedPromise.objects.filter(user=user)
+
+        context = {
+            'user': user,
+            'broken_promises': broken_promises,
+            'finished_promises': finished_promises,
+            'promises': promises
+
+        }
+
+        return render(request, "accounts/profile.html", context)
 
 
 class ProfileEdit(LoginRequiredMixin, View):
@@ -101,7 +115,7 @@ class FriendRequestView(View):
         user = request.user
         FriendRequest.objects.create(from_user=user, to_user=friend)
 
-        return redirect(reverse("accounts:familiar" ))
+        return redirect(reverse("accounts:familiar"))
 
 
 class FriendView(View):
@@ -131,7 +145,23 @@ class RejectFriendView(View):
 class FriendDetailView(LoginRequiredMixin, View):
     def get(self, request, id):
         friend = CustomUser.objects.get(id=id)
-        return render(request, "accounts/friend_detail.html", {"friend": friend})
+        promises = Promise.objects.filter(user=friend)
+        broken_promises = BrokenPromise.objects.filter(user=friend)
+        finished_promises = FinishedPromise.objects.filter(user=friend)
+        user = request.user
+        liked = LikeToPromise.objects.filter(user=user)
+        disliked = DislikeToPromise.objects.filter(user=user)
+        id_liked = [user['promise_id'] for user in liked.values()]
+        id_disliked = [user['promise_id'] for user in disliked.values()]
+        context = {
+            'friend': friend,
+            'broken_promises': broken_promises,
+            'finished_promises': finished_promises,
+            'promises': promises,
+            'id_liked': id_liked,
+            'id_disliked': id_disliked
+        }
+        return render(request, "accounts/friend_detail.html", context)
 
 
 class FamiliarUsersView(LoginRequiredMixin, View):
@@ -153,7 +183,8 @@ class FamiliarUsersView(LoginRequiredMixin, View):
         ).order_by('match_priority')
         friend_requests = FriendRequest.objects.filter(from_user=request.user.id)
         friends = UserFriend.objects.filter(Q(user=request.user.id) | Q(friend=request.user.id))
-        id_friend = [user['user_id'] for user in friends.values()]
+        id_friend = [user['user_id'] if user['user_id'] != request.user.id else user['friend_id']
+                     for user in friends.values()]
         id_request = [user['to_user_id'] for user in friend_requests.values()]
         contex = {
 
@@ -162,3 +193,32 @@ class FamiliarUsersView(LoginRequiredMixin, View):
             "users": users
         }
         return render(request, "accounts/familiar_users.html", contex)
+
+
+class FriendPromiseDetailView(LoginRequiredMixin, View):
+    def get(self, request, friend_id, pk):
+        form = PromiseCommitForm
+
+        promise = Promise.objects.get(id=pk, user_id=friend_id)
+        context = {
+            'promise': promise,
+            'form': form
+        }
+        return render(request, 'promise/promise_detail.html', context)
+
+    def post(self, request, friend_id, pk):
+        form = PromiseCommitForm(data=request.POST)
+        promise = Promise.objects.get(id=pk, user_id=friend_id)
+        if form.is_valid():
+            promise_commit = form.save(commit=False)
+            promise_commit.promise = promise 
+            promise_commit.user_id = request.user.id
+            promise_commit.save()
+            return redirect('accounts:friend-ditail', id=friend_id)
+        else:
+
+            context = {
+                'promise': promise,
+                'form': form
+            }
+            return render(request, 'promise/promise_detail.html', context)

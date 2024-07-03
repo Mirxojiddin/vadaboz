@@ -49,7 +49,6 @@ class CustomUser(AbstractUser):
 
 	def __str__(self):
 		return self.username
-	objects = Manager()
 
 	def get_full_name(self):
 		return f"{self.first_name} {self.last_name}"
@@ -70,3 +69,7 @@ class UserFriend(models.Model):
 
 	def __str__(self):
 		return f"{self.friend.first_name} {self.user.first_name}"
+
+
+
+

@@ -8,46 +8,100 @@
         <img class="cover1_pic" alt="book" src="{{friend.user_photo.url}} ">
     </div>
     <h3> Do'stingizni vadalari</h3>
-    {%if friend.bookreview_set.all%}
+    {%if promises%}
         <div class="row">
 
 
-        {% for review in friend.bookreview_set.all %}
-        <div class="row">
-            <div class="col-2">
-                 <img class="d-block ui-w-40 rounded-circle" alt="book" src="{{review.book.cover_photo.url}} ">
+            {% for promise in promises %}
+            <div class="row">
+                <div>
+                    <ul>
+                        <div class="col-4">
+                               <a href="{% url 'accounts:friend-promise' friend.id  promise.id %}"> Nomi:<b>{{promise.title}} </b></a>
+                        </div>
+                        <li>
+                            Tanifi: {{promise.body}}
+                        </li>
+                        <li>
+                            Tugatilish vaqti:{{promise.finished_at}}
+                        </li>
+                        <div class=" d-inline p-2">
+                             {{book.liketobook_set.all.count}} <a href="{% url 'promise:like-promise' promise.id %}">
+                            <img class="like " alt="book" src="/media/{%if promise.id in id_liked %}liked.png{%else%}like.png{%endif%}"></a>
+                        </div>
+                        <div class=" d-inline p-2">
+                            {{book.disliketobook_set.all.count}}  <a href="{% url 'promise:dislike-promise' promise.id %}">
+                            <img class="like " alt="book" src="/media/{%if promise.id in id_disliked %}disliked.png{%else%}dislike.png{%endif%}"></a>
+                        </div>
+                        <div class=" d-inline p-2 ">
+                            <a href="{% url 'accounts:friend-promise' friend.id  promise.id %}">
+                                <button> Add commit </button>
+                             </a>
+                        </div>
+                    </ul>
+                </div>
             </div>
-            <div class="col-4">
-                 <a href="{% url 'books:detail' review.book.id %}">
-                    {{review.book.title}}
-                </a>
-            </div>
-        </div>
 
-        {%endfor%}
+            {%endfor%}
     </div>
     {%else%}
     <h3>topilmadi</h3>
 {%endif%}
-   <h3> bajargan vadalari</h3>
-    {%if friend.promise.all%}
+   <h3> Bajargan vadalari</h3>
+    {%if finished_promises%}
         <div class="row">
 
 
-        {% for like in friend.liketobook_set.all %}
-        <div class="row">
-            <div class="col-2">
-                 <img class="d-block ui-w-40 rounded-circle" alt="book" src="{{like.book.cover_photo.url}} ">
-            </div>
-            <div class="col-4">
-                <a href="{% url 'books:detail' like.book.id %}">
-                    {{like.book.title}}
-                </a>
-            </div>
+            {% for finished_promise in finished_promises %}
+                <div class="row">
+                    <div>
+                        <ul>
+                            <div class="col-2">
+                                 {{finished_promise.promise.title}}
+                            </div>
+
+                            <li>
+                               <a href="{% url 'accounts:friend-promise' friend.id  finished_promise.promise.id %}"> Nomir:<b>{{finished_promise.promise.title}} </b></a>
+                            </li>
+                            <li>
+                                Tasnifi:{{finished_promise.promise.body}}
+                            </li>
+                            <li>
+                                Tugatilish vaqti:{{finished_promise.promise.finished_at}}
+                            </li>
+                        </ul>
+
+                    </div>
+                </div>
+
+            {%endfor%}
         </div>
+    {%else%}
+    <h3>topilmadi</h3>
+    {%endif%}
 
-        {%endfor%}
-    </div>
+     <h3> Bajarmagan vadalari</h3>
+    {%if broken_promises%}
+            {% for broken_promise in broken_promises %}
+                <div class="row">
+                    <div>
+                        <ul>
+
+                            <div class="col-2">
+                                  <a href="{% url 'accounts:friend-promise' friend.id  broken_promise.promise.id %}">Nomi:<b>{{broken_promise.promise.title}} </b></a>
+                            </div>
+
+                                    <li>
+                                        Tasnifi:{{broken_promise.promise.body}}
+                                    </li>
+                                    <li>
+                                        Tugatish vaqti:{{broken_promise.promise.finished_at}}
+                                    </li>
+                         </ul>
+                    </div>
+                </div>
+
+            {%endfor%}
     {%else%}
     <h3>topilmadi</h3>
     {%endif%}
