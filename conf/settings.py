@@ -25,7 +25,8 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-# Application definition
+BREVO_API_KEY = config('BREVO_API_KEY')
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
