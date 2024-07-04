@@ -1,8 +1,11 @@
+from conf.celery import app
+
 import requests
 import json
 from django.conf import settings
 
 
+@app.task()
 def send_email(subject, message, from_email, to_emails):
     url = "https://api.brevo.com/v3/smtp/email"
 
@@ -28,3 +31,5 @@ def send_email(subject, message, from_email, to_emails):
     else:
         print(f"Failed to send email: {response.status_code}")
         print(response.json())
+
+
